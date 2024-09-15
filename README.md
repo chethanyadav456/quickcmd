@@ -13,6 +13,10 @@ git clone https://github.com/chethanyadav456/quickcmd.git
 ```bash
 cd quickcmd
 ```
+**Before Compiling you need to install the compiler (GCC)**
+
+**Follow this guide to Install GNU Compiler Collection (GCC) - [MinGw](https://www.geeksforgeeks.org/installing-mingw-tools-for-c-c-and-changing-environment-variable/)**
+
 3. Compile the code and run the script
 ```bash
 ./RUN.cmd // For Windows
