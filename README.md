@@ -1,6 +1,8 @@
-![cmd](cmd.png)
-# quickcmd
-A simple command line tool to run commands quickly made with C.
+<div align="center">
+  <img src="cmd.png" alt="cmd" width="80">
+  <h1>quickcmd</h1>
+  <p>A simple command line tool to run commands quickly made with C.</p>
+</div>
 
 ## Installation
 1. Clone the repository
