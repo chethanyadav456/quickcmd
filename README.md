@@ -1,3 +1,4 @@
+![cmd](cmd.png)
 # quickcmd
 A simple command line tool to run commands quickly made with C.
 
