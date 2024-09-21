@@ -13,5 +13,6 @@
 void ipaddr();
 int hostname();
 void display_help();
+void printfNewLine(char *str);
 
 #endif // CMD_FUNCTIONS_H

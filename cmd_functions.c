@@ -14,6 +14,8 @@
 
 #pragma comment(lib, "Ws2_32.lib") // Link with Winsock library
 
+void printfNewLine(char *str);
+
 void ipaddr()
 {
     printf("IP ADDRESS: 192.12.345.23\n");
@@ -53,9 +55,15 @@ int hostname()
 
 void display_help()
 {
-    printf("Available commands:\n");
-    printf("  ipaddr - Display the IP address\n");
-    printf("  help   - Show this help message\n");
-    printf("  hostname   - Display the hostname\n");
-    printf("  exit   - Exit the program\n");
+    printfNewLine("Available commands:");
+    printfNewLine("  ipaddr - Display the IP address");
+    printfNewLine("  help   - Show this help message");
+    printfNewLine("  hostname   - Display the hostname");
+    printfNewLine("  exit   - Exit the program");
 }
+
+void printfNewLine(char * str)
+{
+    printf("%s\n", str);
+}
+
