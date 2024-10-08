@@ -11,16 +11,68 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
-
+#include <iphlpapi.h> // For IP address retrieval
 #pragma comment(lib, "Ws2_32.lib") // Link with Winsock library
+#pragma comment(lib, "Iphlpapi.lib") // Link with IP Helper library
 
 void printfNewLine(char *str);
+void ipaddr();
+int hostname();
+void display_help();
 
+// Function to retrieve and display the local machine's IP addresses
 void ipaddr()
 {
-    printf("IP ADDRESS: 192.12.345.23\n");
+    DWORD dwSize = 0;
+    DWORD dwRetVal = 0;
+    IP_ADAPTER_INFO *pAdapterInfo;
+    IP_ADAPTER_INFO *pAdapter = NULL;
+
+    // Allocate memory for the adapter info structure
+    pAdapterInfo = (IP_ADAPTER_INFO *)malloc(sizeof(IP_ADAPTER_INFO));
+    if (pAdapterInfo == NULL)
+    {
+        printf("Error allocating memory needed to call GetAdaptersInfo\n");
+        return;
+    }
+
+    // Make an initial call to GetAdaptersInfo to get the necessary size of the buffer
+    dwSize = sizeof(IP_ADAPTER_INFO);
+    if (GetAdaptersInfo(pAdapterInfo, &dwSize) == ERROR_BUFFER_OVERFLOW)
+    {
+        free(pAdapterInfo);
+        pAdapterInfo = (IP_ADAPTER_INFO *)malloc(dwSize);
+        if (pAdapterInfo == NULL)
+        {
+            printf("Error allocating memory\n");
+            return;
+        }
+    }
+
+    // Call GetAdaptersInfo to get the adapter information
+    if ((dwRetVal = GetAdaptersInfo(pAdapterInfo, &dwSize)) == NO_ERROR)
+    {
+        pAdapter = pAdapterInfo;
+        while (pAdapter)
+        {
+            printf("Adapter Name: %s\n", pAdapter->AdapterName);
+            printf("IP Address: %s\n", pAdapter->IpAddressList.IpAddress.String);
+
+            // Move to the next adapter in the list
+            pAdapter = pAdapter->Next;
+        }
+    }
+    else
+    {
+        printf("GetAdaptersInfo failed with error: %d\n", dwRetVal);
+    }
+
+    // Free allocated memory
+    if (pAdapterInfo)
+        free(pAdapterInfo);
 }
 
+// Function to get and display the local machine's hostname
 int hostname()
 {
     WSADATA wsaData;
@@ -53,6 +105,7 @@ int hostname()
     return EXIT_SUCCESS;
 }
 
+// Function to display help commands
 void display_help()
 {
     printfNewLine("Available commands:");
@@ -62,8 +115,8 @@ void display_help()
     printfNewLine("  exit   - Exit the program");
 }
 
-void printfNewLine(char * str)
+// Utility function to print strings with a newline
+void printfNewLine(char *str)
 {
     printf("%s\n", str);
 }
-
