@@ -6,14 +6,8 @@
  *   Under License of MIT
  *
  */
+
 #include "cmd_functions.h"
-#include <stdio.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <windows.h>
-#include <iphlpapi.h> // For IP address retrieval
-#pragma comment(lib, "Ws2_32.lib") // Link with Winsock library
-#pragma comment(lib, "Iphlpapi.lib") // Link with IP Helper library
 
 void printfNewLine(char *str);
 void ipaddr();
@@ -23,6 +17,7 @@ void display_help();
 // Function to retrieve and display the local machine's IP addresses
 void ipaddr()
 {
+#ifdef _WIN32
     DWORD dwSize = 0;
     DWORD dwRetVal = 0;
     IP_ADAPTER_INFO *pAdapterInfo;
@@ -70,11 +65,35 @@ void ipaddr()
     // Free allocated memory
     if (pAdapterInfo)
         free(pAdapterInfo);
+
+#else
+    struct ifaddrs *ifaddr, *ifa;
+    char ipstr[INET_ADDRSTRLEN];
+
+    if (getifaddrs(&ifaddr) == -1) {
+        perror("getifaddrs");
+        return;
+    }
+
+    for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+        if (ifa->ifa_addr && ifa->ifa_addr->sa_family == AF_INET) {
+            if (inet_ntop(AF_INET, &((struct sockaddr_in *)ifa->ifa_addr)->sin_addr, ipstr, sizeof(ipstr))) {
+                printf("Adapter Name: %s\n", ifa->ifa_name);
+                printf("IP Address: %s\n", ipstr);
+            } else {
+                perror("inet_ntop");
+            }
+        }
+    }
+
+    freeifaddrs(ifaddr);
+#endif
 }
 
 // Function to get and display the local machine's hostname
 int hostname()
 {
+#ifdef _WIN32
     WSADATA wsaData;
     int result;
 
@@ -102,6 +121,16 @@ int hostname()
 
     // Clean up Winsock
     WSACleanup();
+#else
+    char hostname[256];
+    if (gethostname(hostname, sizeof(hostname)) == 0) {
+        printf("Hostname: %s\n", hostname);
+    } else {
+        perror("gethostname");
+        return EXIT_FAILURE;
+    }
+#endif
+
     return EXIT_SUCCESS;
 }
 

@@ -11,7 +11,8 @@ git clone https://github.com/chethanyadav456/quickcmd.git
 ```
 2. Change the directory
 ```bash
-cd quickcmd
+./run.cmd // For Windows
+sh run.sh // For Linux
 ```
 **Before Compiling you need to install the compiler (GCC)**
 
@@ -19,8 +20,7 @@ cd quickcmd
 
 3. Compile the code and run the script
 ```bash
-./RUN.cmd // For Windows
-./RUN.sh // For Linux (change the file [RUN.cmd] extension to [RUN.sh])
+make run
 ```
 4. Add the path to the environment variables (optional)
 ```bash
