@@ -11,6 +11,10 @@ git clone https://github.com/chethanyadav456/quickcmd.git
 ```
 2. Change the directory
 ```bash
+cd quickcmd
+```
+3. Compile the code and run the script
+```bash
 ./run.cmd // For Windows
 sh run.sh // For Linux
 ```
